@@ -286,7 +286,7 @@ MempoolStatus::read_network_info()
     local_copy.outgoing_connections_count = rpc_network_info.outgoing_connections_count;
     local_copy.incoming_connections_count = rpc_network_info.incoming_connections_count;
     local_copy.white_peerlist_size        = rpc_network_info.white_peerlist_size;
-    local_copy.nettype                    = rpc_network_info.testnet ? cryptonote::network_type::TESTNET : 
+    local_copy.nettype                    = rpc_network_info.testnet ? cryptonote::network_type::TESTNET :
                                             rpc_network_info.stagenet ? cryptonote::network_type::STAGENET : cryptonote::network_type::MAINNET;
     local_copy.cumulative_difficulty      = rpc_network_info.cumulative_difficulty;
     local_copy.block_size_limit           = rpc_network_info.block_size_limit;
@@ -306,11 +306,11 @@ MempoolStatus::read_network_info()
                                               static_cast<double>(
                                               local_copy.block_size_median) / 1024.0).c_str(),
                                               sizeof(local_copy.block_size_median_str));
-                                              
+
     strncpy(local_copy.total_blockchain_size_str, fmt::format("{:0.2f}",
                                                   static_cast<double>(
                                                   local_copy.total_blockchain_size) / 1024.0 / 1024.0 / 1024.0).c_str(),
-                                                  sizeof(local_copy.total_blockchain_size_str));                                                
+                                                  sizeof(local_copy.total_blockchain_size_str));
 
     epee::string_tools::hex_to_pod(rpc_network_info.top_block_hash,
                                    local_copy.top_block_hash);
@@ -351,8 +351,8 @@ MempoolStatus::is_thread_running()
     return is_running;
 }
 
-bf::path MempoolStatus::blockchain_path {"/home/mwo/.loki/lmdb"};
-string MempoolStatus::daemon_url {"http:://127.0.0.1:22023"};
+bf::path MempoolStatus::blockchain_path {"/home/mwo/.arqma/lmdb"};
+string MempoolStatus::daemon_url {"http:://127.0.0.1:19994"};
 cryptonote::network_type MempoolStatus::nettype {cryptonote::network_type::MAINNET};
 atomic<bool>       MempoolStatus::is_running {false};
 boost::thread      MempoolStatus::m_thread;

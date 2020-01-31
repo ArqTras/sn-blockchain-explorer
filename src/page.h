@@ -9,7 +9,7 @@
 
 #include "mstch/mstch.hpp"
 
-#include "loki_headers.h"
+#include "arqma_headers.h"
 
 #include "../gen/version.h"
 
@@ -1019,7 +1019,7 @@ void add_tx_service_node_metadata(mstch::map &context, const cryptonote::transac
 
                     if (detailed) {
                         // Try to get the quorum state to figure out the vote casters & target; unless very
-                        // recent, this requires lokid to be started with --store-quorum-history (PR #702)
+                        // recent, this requires arqmad to be started with --store-quorum-history (PR #702)
                         std::vector<std::string> quorum_nodes;
                         COMMAND_RPC_GET_QUORUM_STATE::response response = {};
                         rpc.get_quorum_state(response, state_change.block_height, state_change.block_height, static_cast<uint8_t>(service_nodes::quorum_type::obligations));
@@ -1134,7 +1134,7 @@ index2(uint64_t page_no = 0, bool refresh_page = false)
     {
         json j_info;
 
-        get_loki_network_info(j_info);
+        get_arqma_network_info(j_info);
 
         return j_info;
     });
@@ -1923,7 +1923,7 @@ show_block(uint64_t _blk_height)
     context["sum_fees"]
             = lokeg::lok_amount_to_str(sum_fees, "{:0.6f}", false);
 
-    // get loki in the block reward
+    // get arqma in the block reward
     context["blk_reward"]
             = lokeg::lok_amount_to_str(txd_coinbase.lok_outputs - sum_fees, "{:0.6f}");
 
@@ -2329,7 +2329,7 @@ show_ringmembers_hex(string const& tx_hash_str)
 
        // make timescale maps for mixins in input
     for (txin_to_key const& in_key: input_key_imgs)
-    {      
+    {
         // get absolute offsets of mixins
         std::vector<uint64_t> absolute_offsets
                 = cryptonote::relative_output_offsets_to_absolute(
@@ -2739,7 +2739,7 @@ show_my_outputs(string tx_hash_str,
 
     if (lok_address_str.empty())
     {
-        return string("Loki address not provided!");
+        return string("ArQmA address not provided!");
     }
 
     if (viewkey_str.empty())
@@ -2759,13 +2759,13 @@ show_my_outputs(string tx_hash_str,
         return string("Cant get tx hash due to parse error: " + tx_hash_str);
     }
 
-    // parse string representing given loki address
+    // parse string representing given arqma address
     cryptonote::address_parse_info address_info;
 
     if (!lokeg::parse_str_address(lok_address_str,  address_info, nettype))
     {
         cerr << "Cant parse string address: " << lok_address_str << endl;
-        return string("Cant parse Loki address: " + lok_address_str);
+        return string("Cant parse ArQmA address: " + lok_address_str);
     }
 
     // parse string representing given private key
@@ -2962,7 +2962,7 @@ show_my_outputs(string tx_hash_str,
     // public transaction key is combined with our viewkey
     // to create, so called, derived key.
     key_derivation derivation;
-    std::vector<key_derivation> additional_derivations(txd.additional_pks.size());   
+    std::vector<key_derivation> additional_derivations(txd.additional_pks.size());
 
     if (tx_prove && multiple_tx_secret_keys.size()
             != txd.additional_pks.size() + 1)
@@ -3321,7 +3321,7 @@ show_my_outputs(string tx_hash_str,
 
                 txout_to_key const& txout_k      = std::get<0>(mix_out);
                 uint64_t amount           = std::get<1>(mix_out);
-                uint64_t output_idx_in_tx = std::get<2>(mix_out);             
+                uint64_t output_idx_in_tx = std::get<2>(mix_out);
 
                 //cout << " - " << pod_to_hex(txout_k.key) << endl;
 
@@ -3413,13 +3413,13 @@ show_my_outputs(string tx_hash_str,
                 if (mine_output)
                 {
                     found_something = true;
-                    show_key_images = true;                   
+                    show_key_images = true;
 
                     // increase sum_mixin_lok only when
                     // public key of an outputs used in ring signature,
                     // matches a public key in a mixin_tx
                     if (txout_k.key != output_data.pubkey)
-                        continue;              
+                        continue;
 
                     // sum up only first output matched found in each input
                     if (no_of_output_matches_found == 0)
@@ -4231,7 +4231,7 @@ show_pushrawtx(string raw_tx_data, string action)
         ptx_vector.push_back({});
         ptx_vector.back().tx = parsed_tx;
     }
-    // if failed, treat raw_tx_data as base64 encoding of signed_loki_tx
+    // if failed, treat raw_tx_data as base64 encoding of signed_arqma_tx
     else
     {
         string decoded_raw_tx_data = epee::string_encoding::base64_decode(raw_tx_data);
@@ -4885,11 +4885,11 @@ search(string search_text)
     result_html = default_txt;
 
 
-    // check if loki address is given based on its length
+    // check if arqma address is given based on its length
     // if yes, then we can only show its public components
     if (search_str_length == 95)
     {
-        // parse string representing given loki address
+        // parse string representing given arqma address
         address_parse_info address_info;
 
         cryptonote::network_type nettype_addr {cryptonote::network_type::MAINNET};
@@ -4909,7 +4909,7 @@ search(string search_text)
         return show_address_details(address_info, nettype_addr);
     }
 
-    // check if integrated loki address is given based on its length
+    // check if integrated arqma address is given based on its length
     // if yes, then show its public components search tx based on encrypted id
     if (search_str_length == 106)
     {
@@ -5424,7 +5424,7 @@ json_rawtransaction(string tx_hash_str)
         }
     }
 
-    // get raw tx json as in loki
+    // get raw tx json as in arqma
 
     try
     {
@@ -5712,7 +5712,7 @@ json_rawblock(string block_no_or_hash)
         return j_response;
     }
 
-    // get raw tx json as in loki
+    // get raw tx json as in arqma
 
     try
     {
@@ -6056,7 +6056,7 @@ json_outputs(string tx_hash_str,
     if (address_str.empty())
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Loki address not provided";
+        j_response["message"] = "ArQmA address not provided";
         return j_response;
     }
 
@@ -6087,13 +6087,13 @@ json_outputs(string tx_hash_str,
         return j_response;
     }
 
-    // parse string representing given loki address
+    // parse string representing given arqma address
     address_parse_info address_info;
 
     if (!lokeg::parse_str_address(address_str,  address_info, nettype))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant parse Loki address: " + address_str;
+        j_response["message"] = "Cant parse ArQmA address: " + address_str;
         return j_response;
 
     }
@@ -6281,7 +6281,7 @@ json_outputsblocks(string _limit,
     if (address_str.empty())
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Loki address not provided";
+        j_response["message"] = "ArQmA address not provided";
         return j_response;
     }
 
@@ -6292,13 +6292,13 @@ json_outputsblocks(string _limit,
         return j_response;
     }
 
-    // parse string representing given Loki address
+    // parse string representing given ArQmA address
     address_parse_info address_info;
 
     if (!lokeg::parse_str_address(address_str, address_info, nettype))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant parse Loki address: " + address_str;
+        j_response["message"] = "Cant parse ArQmA address: " + address_str;
         return j_response;
 
     }
@@ -6444,10 +6444,10 @@ json_networkinfo()
     json j_info;
 
     // get basic network info
-    if (!get_loki_network_info(j_info))
+    if (!get_arqma_network_info(j_info))
     {
         j_response["status"]  = "error";
-        j_response["message"] = "Cant get Loki network info";
+        j_response["message"] = "Cant get ArQmA network info";
         return j_response;
     }
 
@@ -6538,7 +6538,7 @@ json_version()
             {"last_git_commit_hash", string {GIT_COMMIT_HASH}},
             {"last_git_commit_date", string {GIT_COMMIT_DATETIME}},
             {"git_branch_name"     , string {GIT_BRANCH_NAME}},
-            {"loki_version_full"   , string {LOKI_VERSION_FULL}},
+            {"arqma_version_full"   , string {ARQMA_VERSION_FULL}},
             {"api"                 , ONIONEXPLORER_RPC_VERSION},
             {"blockchain_height"   , core_storage->get_current_blockchain_height()}
     };
@@ -7586,7 +7586,7 @@ get_full_page(const string& middle)
 }
 
 bool
-get_loki_network_info(json& j_info)
+get_arqma_network_info(json& j_info)
 {
     MempoolStatus::network_info local_copy_network_info
         = MempoolStatus::current_network_info;
@@ -7683,7 +7683,7 @@ get_footer()
             {"last_git_commit_hash", string {GIT_COMMIT_HASH}},
             {"last_git_commit_date", string {GIT_COMMIT_DATETIME}},
             {"git_branch_name"     , string {GIT_BRANCH_NAME}},
-            {"loki_version_full"   , string {LOKI_VERSION_FULL}},
+            {"arqma_version_full"   , string {ARQMA_VERSION_FULL}},
             {"api"                 , std::to_string(ONIONEXPLORER_RPC_VERSION_MAJOR)
                                      + "."
                                      + std::to_string(ONIONEXPLORER_RPC_VERSION_MINOR)},
@@ -7755,4 +7755,3 @@ add_js_files(mstch::map& context)
 
 
 #endif //CROWLOK_PAGE_H
-

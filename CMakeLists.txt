@@ -13,30 +13,30 @@ if (WIN32)
 endif()
 
 
-if (NOT LOKI_DIR)
-    set(LOKI_DIR ~/loki)
+if (NOT ARQMA_DIR)
+    set(ARQMA_DIR ~/arqma)
 endif()
 
-message(STATUS LOKI_DIR ": ${LOKI_DIR}")
+message(STATUS ARQMA_DIR ": ${ARQMA_DIR}")
 
-set(LOKI_SOURCE_DIR ${LOKI_DIR}
-        CACHE PATH "Path to the root directory for Loki")
+set(ARQMA_SOURCE_DIR ${ARQMA_DIR}
+        CACHE PATH "Path to the root directory for arqma")
 
-# set location of loki build tree
-set(LOKI_BUILD_DIR ${LOKI_SOURCE_DIR}/build/release/
-        CACHE PATH "Path to the build directory for Loki")
+# set location of arqma build tree
+set(ARQMA_BUILD_DIR ${ARQMA_SOURCE_DIR}/build/release/
+        CACHE PATH "Path to the build directory for arqma")
 
 set(MY_CMAKE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake"
         CACHE PATH "The path to the cmake directory of the current project")
 
 list(APPEND CMAKE_MODULE_PATH "${MY_CMAKE_DIR}")
 
-set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${LOKI_BUILD_DIR}"
-        CACHE PATH "Add Loki directory for library searching")
+set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${ARQMA_BUILD_DIR}"
+        CACHE PATH "Add arqma directory for library searching")
 
 include(MyUtils)
 
-find_package(Loki)
+find_package(arqma)
 
 # find boost
 find_package(Boost COMPONENTS
@@ -62,7 +62,7 @@ endif()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin" OR WIN32)
     add_library(unbound STATIC IMPORTED)
-    set_property(TARGET unbound PROPERTY IMPORTED_LOCATION ${LOKI_BUILD_DIR}/external/unbound/libunbound.a)
+    set_property(TARGET unbound PROPERTY IMPORTED_LOCATION ${ARQMA_BUILD_DIR}/external/unbound/libunbound.a)
 endif()
 
 
@@ -71,7 +71,7 @@ endif()
 include_directories(${Boost_INCLUDE_DIRS})
 
 # include monero
-include_directories(${LOKI_SOURCE_DIR}/build)
+include_directories(${ARQMA_SOURCE_DIR}/build)
 
 include_directories("ext/mstch/include")
 include_directories("ext/mstch/include/src")

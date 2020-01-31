@@ -15,7 +15,7 @@
 
 
 
-#include "loki_headers.h"
+#include "arqma_headers.h"
 
 #include "../ext/fmt/ostream.h"
 #include "../ext/fmt/format.h"
@@ -331,7 +331,7 @@ void chunks(Iterator begin,
     }
     while(std::distance(chunk_begin,end) > 0);
 }
-    
+
 /*
  * Remove all characters in in_str that match the given
  * regular expression
